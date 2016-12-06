@@ -1,0 +1,33 @@
+﻿<Window x:Class="EasyRESTTestServer.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EasyRESTTestServer"
+        xmlns:ModelViews="clr-namespace:EasyRESTTestServer.ModelViews"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.DataContext>
+        <ModelViews:MainWindowModelView/>
+    </Window.DataContext>
+    <Grid>
+        <ListView x:Name="listView" ItemsSource="{Binding Students}"  Margin="10,10,10,90">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
+                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
+                    <GridViewColumn Header="Birth Day" DisplayMemberBinding="{Binding BirthDate, StringFormat=Date: {0:MMMM dd, yyyy}}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Label x:Name="lblServerBase" Content="Server Base" VerticalAlignment="Bottom" Margin="10, 0, 115, 50"></Label>
+        <TextBox x:Name="textBox" Height="21" Margin="120,0,10,50" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Bottom"/>
+        <Button x:Name="btnAddSampleEntry" Content="Add Sample" Command="{Binding Path=AddSampleStudentCommand}" HorizontalAlignment="Right" Margin="0,0,265,10" Width="75" Height="28" VerticalAlignment="Bottom" />
+        <Button x:Name="btnLoad" Content="Load Data" HorizontalAlignment="Right" Margin="0,0,185,10" Width="75" Height="28" VerticalAlignment="Bottom" />
+        <Button x:Name="btnSave" Content="Save Changes" HorizontalAlignment="Right" Margin="0, 0, 90, 10" Width="90" Height="28" VerticalAlignment="Bottom"></Button>
+        <Button x:Name="btnClose" Content="Close" HorizontalAlignment="Right" Click="btnClose_Click" Margin="0,0,10,10" Width="75" Height="28" VerticalAlignment="Bottom"/>
+        
+
+    </Grid>
+</Window>
