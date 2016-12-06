@@ -7,21 +7,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyRESTFramework.Client", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyRESTTestClient", "EasyRESTTestClient\EasyRESTTestClient.csproj", "{28413F3E-5A31-4619-ABD9-D16A1A3CD6A5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EasyRESTServer", "EasyRESTServer\EasyRESTServer.xproj", "{8AA62C3C-76C9-416C-9B15-3DD133D42F07}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientFramework", "ClientFramework", "{13672929-5396-471E-B748-8960DE3F32DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServerTestApp", "ServerTestApp", "{C62980BF-32E1-43B3-860E-8BD4A49E3E18}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientTestApp", "ClientTestApp", "{A099E914-2ED7-49F6-BF16-8189AC50F2D0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.Interfaces", "DataAccess\DataAccess.Interfaces.xproj", "{AD71BAC6-88F6-4306-9842-E59D0E57607B}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.DataModels", "DataModels\DataAccess.DataModels.xproj", "{20951583-D2E8-43DF-BD34-EE55ECB70DE6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccessLayer", "DataAccessLayer", "{484A98E2-C2D9-4822-AF52-6CA2CDAF62CD}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.EntityFrameworkCore", "DataAccess.EntityFrameworkCore\DataAccess.EntityFrameworkCore.xproj", "{5E9E43BB-7F3A-4282-871D-FF57CD523D8C}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.Interfaces", "ServerTestApp\DataAccessLayer\DataAccess\DataAccess.Interfaces.xproj", "{AD71BAC6-88F6-4306-9842-E59D0E57607B}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.DataModels", "ServerTestApp\DataAccessLayer\DataModels\DataAccess.DataModels.xproj", "{20951583-D2E8-43DF-BD34-EE55ECB70DE6}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.EntityFrameworkCore", "ServerTestApp\DataAccessLayer\DataAccess.EntityFrameworkCore\DataAccess.EntityFrameworkCore.xproj", "{5E9E43BB-7F3A-4282-871D-FF57CD523D8C}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EasyRESTServer", "ServerTestApp\EasyRESTServer\EasyRESTServer.xproj", "{8AA62C3C-76C9-416C-9B15-3DD133D42F07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51F9EDBA-4E55-4470-A8D6-D5B7D8F9AB8F}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +42,6 @@ Global
 		{28413F3E-5A31-4619-ABD9-D16A1A3CD6A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28413F3E-5A31-4619-ABD9-D16A1A3CD6A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28413F3E-5A31-4619-ABD9-D16A1A3CD6A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD71BAC6-88F6-4306-9842-E59D0E57607B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD71BAC6-88F6-4306-9842-E59D0E57607B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD71BAC6-88F6-4306-9842-E59D0E57607B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +54,10 @@ Global
 		{5E9E43BB-7F3A-4282-871D-FF57CD523D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E9E43BB-7F3A-4282-871D-FF57CD523D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E9E43BB-7F3A-4282-871D-FF57CD523D8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA62C3C-76C9-416C-9B15-3DD133D42F07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,10 +65,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{76EBEE74-FF30-4DDB-8184-235FA606FABB} = {13672929-5396-471E-B748-8960DE3F32DD}
 		{28413F3E-5A31-4619-ABD9-D16A1A3CD6A5} = {A099E914-2ED7-49F6-BF16-8189AC50F2D0}
-		{8AA62C3C-76C9-416C-9B15-3DD133D42F07} = {C62980BF-32E1-43B3-860E-8BD4A49E3E18}
+		{484A98E2-C2D9-4822-AF52-6CA2CDAF62CD} = {C62980BF-32E1-43B3-860E-8BD4A49E3E18}
 		{AD71BAC6-88F6-4306-9842-E59D0E57607B} = {484A98E2-C2D9-4822-AF52-6CA2CDAF62CD}
 		{20951583-D2E8-43DF-BD34-EE55ECB70DE6} = {484A98E2-C2D9-4822-AF52-6CA2CDAF62CD}
-		{484A98E2-C2D9-4822-AF52-6CA2CDAF62CD} = {C62980BF-32E1-43B3-860E-8BD4A49E3E18}
 		{5E9E43BB-7F3A-4282-871D-FF57CD523D8C} = {484A98E2-C2D9-4822-AF52-6CA2CDAF62CD}
+		{8AA62C3C-76C9-416C-9B15-3DD133D42F07} = {C62980BF-32E1-43B3-860E-8BD4A49E3E18}
 	EndGlobalSection
 EndGlobal
