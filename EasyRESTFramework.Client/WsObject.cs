@@ -33,5 +33,10 @@ namespace EasyRESTFramework.Client
             }
             return false;
         }
+
+        public bool HasValidId()
+        {
+            return (Id.Equals("-1") == false);
+        }
     }
 }

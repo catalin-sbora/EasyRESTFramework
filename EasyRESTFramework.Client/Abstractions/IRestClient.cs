@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EasyRESTFramework.Client.Abstractions
@@ -9,25 +10,21 @@ namespace EasyRESTFramework.Client.Abstractions
     public interface IRestClient
     {
         //we need to specify conditions
-        IEnumerable<TEntity> GetItems<TEntity>();
-        Task<IEnumerable<TEntity>> GetItemsAsync<TEntity>();
+        Task<TEntity> GetItemAsync<TEntity>(int itemId, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task<IEnumerable<TEntity>> GetItemsAsync<TEntity>(CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task DeleteItemAsync<TEntity>(TEntity itemToDelete, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task<TEntity> PostItemAsync<TEntity>(TEntity itemToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task PutItemAsync<TEntity>(TEntity itemToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task PutItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
 
-        TEntity PostItem<TEntity>(TEntity itemToPost);
-        Task<TEntity> PostItemAsync<TEntity>(TEntity itemToPost);
-
-        IEnumerable<TEntity> PostItems<TEntity>(IEnumerable<TEntity> itemsToPost);
-        Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost);
-
-        void PutItem<TEntity>(TEntity itemToPut);
-        Task PutItemAsync<TEntity>(TEntity itemToPut);
-
-        void PutItems<TEntity>(IEnumerable<TEntity> itemsToPut);
-        Task PutItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPut);
-
-        void DeleteItem<TEntity>(TEntity itemToDelete);
-        Task DeleteItemAsync<TEntity>(TEntity itemToDelete);
-
-        void DeleteItems<TEntity>(IEnumerable<TEntity> itemsToDelete);
-        Task DeleteItemsAsync<TEntity>(IEnumerable<TEntity> itemsToDeleted);
+        TEntity GetItem<TEntity>(int itemId) where TEntity : WsObject;
+        IEnumerable<TEntity> GetItems<TEntity>() where TEntity : WsObject;
+        void DeleteItem<TEntity>(TEntity itemToDelete) where TEntity : WsObject;
+        TEntity PostItem<TEntity>(TEntity itemToPost) where TEntity : WsObject;
+        IEnumerable<TEntity> PostItems<TEntity>(IEnumerable<TEntity> itemsToPost) where TEntity : WsObject;
+        void PutItem<TEntity>(TEntity itemToPut) where TEntity : WsObject;
+        void PutItems<TEntity>(IEnumerable<TEntity> itemsToPut) where TEntity : WsObject;  
+        
     }
 }

@@ -7,7 +7,8 @@ using EasyRESTTestServer.Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
-
+using EasyRESTFramework.Client.Abstractions;
+using EasyRESTFramework.Client;
 namespace EasyRESTTestServer.ModelViews
 {
     public class MainWindowModelView

@@ -42,6 +42,9 @@
     <Compile Include="Abstractions\IRestClient.cs" />
     <Compile Include="Abstractions\IWsContext.cs" />
     <Compile Include="Abstractions\IWsSet.cs" />
+    <Compile Include="EasyRESTClient.cs" />
+    <Compile Include="Exceptions\RESTResponseException.cs" />
+    <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Internal\ObjectStateManager.cs" />
     <Compile Include="JSONSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -49,6 +52,7 @@
     <Compile Include="WsObject.cs" />
     <Compile Include="WsSet.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
