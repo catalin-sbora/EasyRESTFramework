@@ -9,6 +9,8 @@ namespace EasyRESTFramework.Client.Abstractions
     public interface IWsContext
     {
         IWsSet<TEntity> Set<TEntity>() where TEntity: WsObject;
+        Task SaveAllAsync();
         void SaveAll();
+        IRestClient RESTClient { get; }
     }
 }

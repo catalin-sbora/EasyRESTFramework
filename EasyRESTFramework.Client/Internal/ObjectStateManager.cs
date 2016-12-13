@@ -11,6 +11,7 @@ namespace EasyRESTFramework.Client.Internal
         private HashSet<WsObject> _addedContainer = new HashSet<WsObject>();
         private HashSet<WsObject> _modifiedContainer = new HashSet<WsObject>();
         private HashSet<WsObject> _deletedContainer = new HashSet<WsObject>();
+       
 
         public ObjectStateManager()
         {

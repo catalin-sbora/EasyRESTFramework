@@ -107,7 +107,8 @@ namespace EasyRESTFramework.Client
             var requestUri = getCollectionUri<TEntity>();
             var response = await _client.PostAsJsonAsync<IEnumerable<TEntity>>(requestUri, itemsToPost, cancelToken);
             response.EnsureIsSuccessStatusCode();
-            retList = await response.Content.ReadAsAsync<List<TEntity>>(_mediaFormatters, cancelToken);
+            retList = await response.Content.ReadAsAsync(typeof(TEntity), _mediaFormatters, cancelToken) as IEnumerable<TEntity>; 
+            //retList = result;
 
             return retList;
         }
@@ -167,7 +168,6 @@ namespace EasyRESTFramework.Client
         {
             PutItemsAsync(itemsToPut).RunSynchronously();
         }
-
         
     }
 

@@ -13,22 +13,16 @@ namespace EasyRESTFramework.Client
     {
         //private Dictionary<string, IStateAccessor> dataSets = new Dictionary<string, IStateAccessor>();
         private readonly Dictionary<String, ObjectStateManager> _setStatesManagers = new Dictionary<string, ObjectStateManager>();
-        private readonly Dictionary<String, object> _availableSets = new Dictionary<string, object>();
-        private readonly IEntityTextSerializer _serializer;
+        private readonly Dictionary<String, object> _availableSets = new Dictionary<string, object>();        
         private readonly IRestClient _restClient;
 
-        public WsContext(IRestClient restClient) : this(restClient, new JSONSerializer())
+        
+        public WsContext(IRestClient restClient)
         {
-            //use Json serializer as default
+            _restClient = restClient;            
         }
 
-        public WsContext(IRestClient restClient, IEntityTextSerializer serializer)
-        {
-            _restClient = restClient;
-            _serializer = serializer;           
-        }
-
-        public void SaveAll()
+        private async Task SaveAddedObjects()
         {
             foreach (var stateManagerEntry in _setStatesManagers)
             {
@@ -37,21 +31,49 @@ namespace EasyRESTFramework.Client
                 {
                     //save added
                     if (_restClient != null)
-                    {                        
-                         _restClient.PostItems(added);               
+                    {
+                        IEnumerable<WsObject> postedItems =  await _restClient.PostItemsAsync(added);
+                        var savedItemsCount = postedItems.Count();
+                        var addedItemsCount = added.Count();
+                        if (savedItemsCount == addedItemsCount)
+                        {
+                            for (int i = 0; i < savedItemsCount; i++)
+                            {
+                                added.ElementAt(i).Id = postedItems.ElementAt(i).Id;
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Not all the elements were saved on the server side. We received less elements than we sent.");
+                            //some data is missing and could not be saved.
+                            //the entire data set needs to be reloaded to see what has been saved
+
+                        } 
                     }
                 }
+            }
 
+        }
+        private async Task SaveModifedObjects()
+        {
+            foreach (var stateManagerEntry in _setStatesManagers)
+            {
                 IEnumerable<WsObject> modified = stateManagerEntry.Value.GetModifiedObjects();
                 if (modified.Count<WsObject>() > 0)
                 {
                     //save modified
                     if (modified.Count<WsObject>() > 0)
                     {
-                        _restClient.PutItems(modified);
+                        await _restClient.PutItemsAsync(modified);
                     }
                 }
+            }
+        }
 
+        private async Task SaveDeletedObjects()
+        {
+            foreach (var stateManagerEntry in _setStatesManagers)
+            {
                 IEnumerable<WsObject> deleted = stateManagerEntry.Value.GetDeleteObjects();
                 if (deleted.Count<WsObject>() > 0)
                 {
@@ -59,11 +81,28 @@ namespace EasyRESTFramework.Client
                     //delete 
                     if (_restClient != null)
                     {
-                        _restClient.DeleteItems(deleted);
+                        foreach (WsObject currentItem in deleted)
+                        {
+                            await _restClient.DeleteItemAsync(currentItem);
+                            // _restClient.Dete
+                        }
+                        // _restClient.DeleteItems(deleted);
                     }
-                   // t.GetRuntimeMethod("Add",);
+                    // t.GetRuntimeMethod("Add",);
                 }
-            }         
+            }
+        }
+
+        public async Task SaveAllAsync()
+        {
+            await SaveAddedObjects();
+            await SaveModifedObjects();
+            await SaveDeletedObjects();
+            
+        }
+        public void SaveAll()
+        {
+            SaveAllAsync().RunSynchronously();      
         }
 
         public IWsSet<TEntity> Set<TEntity>() where TEntity : WsObject
@@ -89,7 +128,13 @@ namespace EasyRESTFramework.Client
             return retSet;
         }
 
-        
+        public IRestClient RESTClient
+        {
+            get
+            {
+                return _restClient;
+            }            
+        }
 
     }
 }
