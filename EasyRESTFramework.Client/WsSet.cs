@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using EasyRESTFramework.Client.Internal;
 using EasyRESTFramework.Client.Abstractions;
 using System.Reflection;
+using EasyRESTFramework.Client.Filters;
+
 namespace EasyRESTFramework.Client
 {
     public class WsSet<TEntity> : IWsSet<TEntity> where TEntity: WsObject
@@ -93,26 +95,44 @@ namespace EasyRESTFramework.Client
             }
 
             return result;
-        }
-
-        public IEnumerable<TEntity> FindEntities(params object[] keys)
-        {
-            throw new NotImplementedException();
-        }        
-
+        }       
         
-                
-
         public IEnumerable<TEntity> GetAll()
         {
             //get the infor directly from the server. Consider implementing caching for handling offline sessions
             //return _wsContext.RESTClient.GetItems<TEntity>();
-            
+            IEnumerable<TEntity> result = GetFilteredData(null);
+
+            return result;
+        }
+
+        public IEnumerable<TEntity> GetFilteredData(QueryFilter filter)
+        {
+            IEnumerable<TEntity> result = null;
+                result = GetFilteredDataAsync(filter).Result;
+            return result;
+        }
+
+        
+        public Type GetStoredType()
+        {
+            return typeof(TEntity);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            var result = await GetFilteredDataAsync(null);
+            return result;
+        }
+
+        public async Task<IEnumerable<TEntity>> GetFilteredDataAsync(QueryFilter filter)
+        {
+            var result = new List<TEntity>();
             bool failedToGetData = false;
             try
             {
                 IEnumerable<TEntity> internalResult = null;
-                internalResult = _wsContext.RESTClient.GetItems<TEntity>();
+                internalResult =  await _wsContext.RESTClient.GetItemsAsync<TEntity>(filter);
                 Dictionary<TEntity, TEntity> tempResult = new Dictionary<TEntity, TEntity>();
                 foreach (TEntity item in internalResult)
                 {
@@ -120,13 +140,15 @@ namespace EasyRESTFramework.Client
                     {
                         ShallowCopy(_entities[item], item);
                         tempResult[item] = item;
+                        result.Add(_entities[item]);
                     }
                     else
                     {
+
                         //add this to our _entities list
                         _entities.Add(item, item);
+                        result.Add(item);
                         tempResult.Add(item, item);
-
                     }
                 }
 
@@ -148,29 +170,24 @@ namespace EasyRESTFramework.Client
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 failedToGetData = true;
             }
-            //if (failedToGetData)
-            var result = new List<TEntity>();
-            foreach (TEntity entity in _entities.Values)
+
+            if (failedToGetData)
             {
-                result.Add(entity);
+                //use what we have in memory
+                if (filter == null)
+                {
+                    result = _entities.Values.ToList();
+                }
+                else
+                {
+                    result = _entities.Values.Where(_wsContext.FilterBuilder.CreateExpressionFilter<TEntity>(filter)).ToList();
+                }
             }
-
             return result;
-
         }
-
-        
-        public Type GetStoredType()
-        {
-            throw new NotImplementedException();
-        }
-
-        
-
-        
     }
 }

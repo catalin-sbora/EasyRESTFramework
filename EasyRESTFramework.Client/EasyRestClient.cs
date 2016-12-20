@@ -8,6 +8,7 @@ using System.Net.Http.Formatting;
 using System.Threading;
 using EasyRESTFramework.Client.Abstractions;
 using EasyRESTFramework.Client.Extensions;
+using EasyRESTFramework.Client.Filters;
 
 namespace EasyRESTFramework.Client
 {
@@ -15,11 +16,20 @@ namespace EasyRESTFramework.Client
     {
         private readonly string _baseURL = "";
         private readonly HttpClient _client;
-        private List<MediaTypeFormatter> _mediaFormatters = new List<MediaTypeFormatter>(); 
-        public EasyRESTClient(string baseURL)
+        private List<MediaTypeFormatter> _mediaFormatters = new List<MediaTypeFormatter>();
+        private readonly IQueryFilterBuilder _queryFilterBuilder;
+        public EasyRESTClient(string baseURL, IQueryFilterBuilder filterBuilder = null)
         {            
             _baseURL = baseURL;
-            _client = new HttpClient();            
+            _client = new HttpClient();
+            if (filterBuilder != null)
+            {
+                _queryFilterBuilder = filterBuilder;
+            }
+            else
+            {
+                _queryFilterBuilder = new QueryFilterBuilderImpl();
+            }
             _client.BaseAddress = new System.Uri(_baseURL);
             _mediaFormatters.Add(new JsonMediaTypeFormatter());
             _mediaFormatters.Add(new XmlMediaTypeFormatter());         
@@ -61,11 +71,18 @@ namespace EasyRESTFramework.Client
             return retItem;
         }
 
-        public async Task<IEnumerable<TEntity>> GetItemsAsync<TEntity>(CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
+        public async Task<IEnumerable<TEntity>> GetItemsAsync<TEntity>(QueryFilter filter = null, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
         {
             IEnumerable<TEntity> retList = null;
 
             var requestUri = getCollectionUri<TEntity>();
+            if (filter != null)
+            {
+                //consider injecting the filter builder and make the builder receive the filter as parameter for its methods
+
+                string stringFilter = _queryFilterBuilder.CreateStringFilter(filter);
+                requestUri += stringFilter;
+            }
             var httpResponse = await _client.GetAsync(requestUri);
             httpResponse.EnsureIsSuccessStatusCode();
             retList = await httpResponse.Content.ReadAsAsync<List<TEntity>>(_mediaFormatters);
@@ -134,9 +151,9 @@ namespace EasyRESTFramework.Client
             return retVal;
         }
 
-        public IEnumerable<TEntity> GetItems<TEntity>() where TEntity : WsObject
+        public IEnumerable<TEntity> GetItems<TEntity>(QueryFilter filter) where TEntity : WsObject
         {
-            var retVal = GetItemsAsync<TEntity>().Result;
+            var retVal = GetItemsAsync<TEntity>(filter).Result;
 
             return retVal;
         }

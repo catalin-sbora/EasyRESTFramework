@@ -81,12 +81,20 @@ namespace EasyRESTFramework.Client.Internal
             return _modifiedContainer.ToList<WsObject>();
         }
 
-        public void MarkObjectsAsSaved()
+        public void MarkAddedObjectsAsSaved()
         {
-            _modifiedContainer.Clear();
-            _deletedContainer.Clear();
             _addedContainer.Clear();
         }
+
+        public void MarkDeletedObjectsAsSaved()
+        {
+            _deletedContainer.Clear();
+        }
+
+        public void MarkModifiedObjectsAsSaved()
+        {
+            _modifiedContainer.Clear();
+        }        
 
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EasyRESTFramework.Client.Filters;
 
 namespace EasyRESTFramework.Client.Abstractions
 {
@@ -11,7 +12,7 @@ namespace EasyRESTFramework.Client.Abstractions
     {
         //we need to specify conditions
         Task<TEntity> GetItemAsync<TEntity>(int itemId, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
-        Task<IEnumerable<TEntity>> GetItemsAsync<TEntity>(CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task<IEnumerable<TEntity>> GetItemsAsync<TEntity>(QueryFilter filter = null, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task DeleteItemAsync<TEntity>(TEntity itemToDelete, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task<TEntity> PostItemAsync<TEntity>(TEntity itemToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
@@ -19,7 +20,7 @@ namespace EasyRESTFramework.Client.Abstractions
         Task PutItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
 
         TEntity GetItem<TEntity>(int itemId) where TEntity : WsObject;
-        IEnumerable<TEntity> GetItems<TEntity>() where TEntity : WsObject;
+        IEnumerable<TEntity> GetItems<TEntity>(QueryFilter filter = null) where TEntity : WsObject;
         void DeleteItem<TEntity>(TEntity itemToDelete) where TEntity : WsObject;
         TEntity PostItem<TEntity>(TEntity itemToPost) where TEntity : WsObject;
         IEnumerable<TEntity> PostItems<TEntity>(IEnumerable<TEntity> itemsToPost) where TEntity : WsObject;

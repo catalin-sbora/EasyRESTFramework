@@ -12,5 +12,6 @@ namespace EasyRESTFramework.Client.Abstractions
         Task SaveAllAsync();
         void SaveAll();
         IRestClient RESTClient { get; }
+        IQueryFilterBuilder FilterBuilder { get; }
     }
 }

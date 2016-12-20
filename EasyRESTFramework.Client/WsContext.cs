@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EasyRESTFramework.Client.Abstractions;
 using EasyRESTFramework.Client.Internal;
 using System.Reflection;
+using EasyRESTFramework.Client.Filters;
 
 namespace EasyRESTFramework.Client
 {
@@ -15,11 +16,15 @@ namespace EasyRESTFramework.Client
         private readonly Dictionary<String, ObjectStateManager> _setStatesManagers = new Dictionary<string, ObjectStateManager>();
         private readonly Dictionary<String, object> _availableSets = new Dictionary<string, object>();        
         private readonly IRestClient _restClient;
-
+        private readonly IQueryFilterBuilder _filterBuilder;
         
-        public WsContext(IRestClient restClient)
+        public WsContext(IRestClient restClient, IQueryFilterBuilder filterBuilder = null)
         {
-            _restClient = restClient;            
+            _restClient = restClient;
+            if (filterBuilder == null)
+                _filterBuilder = new QueryFilterBuilderImpl();
+            else
+                _filterBuilder = filterBuilder;
         }
 
         private async Task SaveAddedObjects()
@@ -95,10 +100,31 @@ namespace EasyRESTFramework.Client
 
         public async Task SaveAllAsync()
         {
-            await SaveAddedObjects();
-            await SaveModifedObjects();
-            await SaveDeletedObjects();
-            
+            try
+            {
+                await SaveAddedObjects();
+                foreach (var stateManagerEntry in _setStatesManagers)
+                {
+                    stateManagerEntry.Value.MarkAddedObjectsAsSaved();
+                }
+
+                await SaveModifedObjects();
+                foreach (var stateManagerEntry in _setStatesManagers)
+                {
+                    stateManagerEntry.Value.MarkModifiedObjectsAsSaved();
+                }
+
+                await SaveDeletedObjects();
+                foreach (var stateManagerEntry in _setStatesManagers)
+                {
+                    stateManagerEntry.Value.MarkDeletedObjectsAsSaved();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public void SaveAll()
         {
@@ -136,5 +162,12 @@ namespace EasyRESTFramework.Client
             }            
         }
 
+        public IQueryFilterBuilder FilterBuilder
+        {
+            get
+            {
+                return _filterBuilder;
+            }
+        }
     }
 }

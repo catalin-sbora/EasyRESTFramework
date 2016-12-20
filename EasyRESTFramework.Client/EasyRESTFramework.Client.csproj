@@ -38,13 +38,16 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstractions\IEntityTextSerializer.cs" />
     <Compile Include="Abstractions\IRestClient.cs" />
+    <Compile Include="Abstractions\IQueryFilterBuilder.cs" />
     <Compile Include="Abstractions\IWsContext.cs" />
     <Compile Include="Abstractions\IWsSet.cs" />
     <Compile Include="EasyRESTClient.cs" />
     <Compile Include="Exceptions\RESTResponseException.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
+    <Compile Include="Filters\QueryFilter.cs" />
+    <Compile Include="Filters\QueryFilterCriteria.cs" />
+    <Compile Include="Filters\QueryFilterBuilderImpl.cs" />
     <Compile Include="Internal\ObjectStateManager.cs" />
     <Compile Include="JSONSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
