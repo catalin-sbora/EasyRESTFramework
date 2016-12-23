@@ -8,6 +8,7 @@ using EasyRESTFramework.Client.Filters;
 
 namespace EasyRESTFramework.Client.Abstractions
 {
+    /*REST Client async */
     public interface IRestClient
     {
         //we need to specify conditions
@@ -19,13 +20,14 @@ namespace EasyRESTFramework.Client.Abstractions
         Task PutItemAsync<TEntity>(TEntity itemToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task PutItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
 
-        TEntity GetItem<TEntity>(int itemId) where TEntity : WsObject;
+
+       /* TEntity GetItem<TEntity>(int itemId) where TEntity : WsObject;
         IEnumerable<TEntity> GetItems<TEntity>(QueryFilter filter = null) where TEntity : WsObject;
         void DeleteItem<TEntity>(TEntity itemToDelete) where TEntity : WsObject;
         TEntity PostItem<TEntity>(TEntity itemToPost) where TEntity : WsObject;
         IEnumerable<TEntity> PostItems<TEntity>(IEnumerable<TEntity> itemsToPost) where TEntity : WsObject;
         void PutItem<TEntity>(TEntity itemToPut) where TEntity : WsObject;
-        void PutItems<TEntity>(IEnumerable<TEntity> itemsToPut) where TEntity : WsObject;  
+        void PutItems<TEntity>(IEnumerable<TEntity> itemsToPut) where TEntity : WsObject;  */
         
     }
 }

@@ -7,7 +7,7 @@ using EasyRESTFramework.Client;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace EasyRESTTestServer.Models
+namespace EasyRESTTestClient.Models
 {
     public class ObservableObject : WsObject, INotifyPropertyChanged
     {

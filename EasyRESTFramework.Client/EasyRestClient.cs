@@ -25,6 +25,7 @@ namespace EasyRESTFramework.Client
             if (filterBuilder != null)
             {
                 _queryFilterBuilder = filterBuilder;
+                
             }
             else
             {
@@ -38,7 +39,7 @@ namespace EasyRESTFramework.Client
         private string getItemUri<TEntity>(TEntity itemType) where TEntity: WsObject
         {
             string retVal = "";
-            var type = typeof(TEntity);
+            var type = itemType.GetType();
             retVal = type.Name.ToLower();
             retVal += "s/" + itemType.Id;    
             return retVal;
@@ -50,6 +51,15 @@ namespace EasyRESTFramework.Client
             var type = typeof(TEntity);
             retVal = type.Name.ToLower();
             retVal += "s/" + itemId;
+            return retVal;
+        }
+
+        private string getCollectionUri<TEntity>(TEntity firstItemInCollection) where TEntity : WsObject
+        {
+            string retVal = "";
+            var type = firstItemInCollection.GetType();
+            retVal = type.Name.ToLower();
+            retVal += "s";
             return retVal;
         }
 
@@ -83,6 +93,7 @@ namespace EasyRESTFramework.Client
                 string stringFilter = _queryFilterBuilder.CreateStringFilter(filter);
                 requestUri += stringFilter;
             }
+            
             var httpResponse = await _client.GetAsync(requestUri);
             httpResponse.EnsureIsSuccessStatusCode();
             retList = await httpResponse.Content.ReadAsAsync<List<TEntity>>(_mediaFormatters);
@@ -106,8 +117,8 @@ namespace EasyRESTFramework.Client
                 requestUri = getItemUri(itemToPost);
             }
             else
-            {
-                requestUri = getCollectionUri<TEntity>();
+            {                
+                requestUri = getCollectionUri<TEntity>(itemToPost);
             }
             //todo: post data depending on the selected media formatter
             var response = await _client.PostAsJsonAsync(requestUri, itemToPost, cancelToken);
@@ -120,13 +131,15 @@ namespace EasyRESTFramework.Client
         public async Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
         {
             IEnumerable<TEntity> retList = null;
-
-            var requestUri = getCollectionUri<TEntity>();
-            var response = await _client.PostAsJsonAsync<IEnumerable<TEntity>>(requestUri, itemsToPost, cancelToken);
-            response.EnsureIsSuccessStatusCode();
-            retList = await response.Content.ReadAsAsync(typeof(TEntity), _mediaFormatters, cancelToken) as IEnumerable<TEntity>; 
-            //retList = result;
-
+            if (itemsToPost.Count() > 0)
+            {
+                var firstItem = itemsToPost.First();
+                var requestUri = getCollectionUri(firstItem);
+                var response = await _client.PostAsJsonAsync(requestUri, itemsToPost, cancelToken);
+                response.EnsureIsSuccessStatusCode();
+                retList = await response.Content.ReadAsAsync(itemsToPost.GetType(), _mediaFormatters, cancelToken) as IEnumerable<TEntity>;
+                //retList = result;
+            }
             return retList;
         }
 
@@ -144,7 +157,7 @@ namespace EasyRESTFramework.Client
             response.EnsureIsSuccessStatusCode();
         }
 
-
+        /*
         public TEntity GetItem<TEntity>(int itemId) where TEntity : WsObject
         {
             var retVal = GetItemAsync<TEntity>(itemId).Result;
@@ -185,7 +198,7 @@ namespace EasyRESTFramework.Client
         {
             PutItemsAsync(itemsToPut).RunSynchronously();
         }
-        
+        */
     }
 
             

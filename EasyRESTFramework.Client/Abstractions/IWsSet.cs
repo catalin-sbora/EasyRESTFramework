@@ -15,9 +15,9 @@ namespace EasyRESTFramework.Client.Abstractions
 
         bool Update(TEntity toUpdate);
 
-        IEnumerable<TEntity> GetAll();
+        /*IEnumerable<TEntity> GetAll();
 
-        IEnumerable<TEntity> GetFilteredData(QueryFilter filter);
+        IEnumerable<TEntity> GetFilteredData(QueryFilter filter);*/
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 

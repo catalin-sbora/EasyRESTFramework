@@ -49,7 +49,6 @@
     <Compile Include="Filters\QueryFilterCriteria.cs" />
     <Compile Include="Filters\QueryFilterBuilderImpl.cs" />
     <Compile Include="Internal\ObjectStateManager.cs" />
-    <Compile Include="JSONSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WsContext.cs" />
     <Compile Include="WsObject.cs" />

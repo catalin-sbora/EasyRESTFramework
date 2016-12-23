@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EasyRESTFramework.Client;
-namespace EasyRESTTestServer.Models
+namespace EasyRESTTestClient.Models
 {
     public class Student : ObservableObject
     {

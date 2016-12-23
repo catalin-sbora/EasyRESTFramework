@@ -15,12 +15,13 @@ namespace EasyRESTFramework.Client
     {
         private readonly IWsContext _wsContext;
         private readonly Dictionary<TEntity, TEntity> _entities = new Dictionary<TEntity, TEntity>();
-        private readonly ObjectStateManager _stateManager = new ObjectStateManager();
+        private readonly ObjectStateManager _stateManager = null;
         //private readonly HashSet<EntityContainer> _collection = new HashSet<EntityContainer>();
         
         internal WsSet(IWsContext wsContext, ObjectStateManager stateManager)
         {
             this._wsContext = wsContext;
+            this._stateManager = stateManager;
         }
 
         public WsSet(IWsContext wsContext): this(wsContext, null)
@@ -95,24 +96,9 @@ namespace EasyRESTFramework.Client
             }
 
             return result;
-        }       
+        }      
         
-        public IEnumerable<TEntity> GetAll()
-        {
-            //get the infor directly from the server. Consider implementing caching for handling offline sessions
-            //return _wsContext.RESTClient.GetItems<TEntity>();
-            IEnumerable<TEntity> result = GetFilteredData(null);
-
-            return result;
-        }
-
-        public IEnumerable<TEntity> GetFilteredData(QueryFilter filter)
-        {
-            IEnumerable<TEntity> result = null;
-                result = GetFilteredDataAsync(filter).Result;
-            return result;
-        }
-
+       
         
         public Type GetStoredType()
         {

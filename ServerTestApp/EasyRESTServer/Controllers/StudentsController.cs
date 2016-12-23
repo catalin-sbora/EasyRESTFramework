@@ -37,12 +37,19 @@ namespace EasyRESTServer.Controllers
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody]Student value)
+        public IActionResult Post([FromBody]IEnumerable<Student> students)
         {
-            _studentsRepo.Add(value);
+            foreach(Student s in students)
+            {
+                if (s.Id < 0)
+                    s.Id = 0;
+
+                _studentsRepo.Add(s);
+            }
             _persistContext.SaveAll();
             //_persistContext.
-            return Json(value);
+            JsonResult result = Json(students);
+            return result;
         }
 
         // PUT api/values/5

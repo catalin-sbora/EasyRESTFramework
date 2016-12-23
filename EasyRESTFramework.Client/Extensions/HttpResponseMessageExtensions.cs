@@ -20,7 +20,10 @@ namespace EasyRESTFramework.Client.Extensions
             {
                 response.Content.Dispose();
             }
-
+            if (content.Length == 0)
+            {
+                content = response.ReasonPhrase;
+            }
             throw new RESTResponseException(response.StatusCode, content);
         }
 

@@ -12,7 +12,7 @@ namespace EasyRESTFramework.Client.Filters
 {
     public class QueryFilterBuilderImpl : IQueryFilterBuilder
     {
-        private QueryFilter _inputFilter = null;
+       
         public QueryFilterBuilderImpl()
         {
             

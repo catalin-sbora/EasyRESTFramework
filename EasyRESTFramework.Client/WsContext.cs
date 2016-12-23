@@ -74,7 +74,6 @@ namespace EasyRESTFramework.Client
                 }
             }
         }
-
         private async Task SaveDeletedObjects()
         {
             foreach (var stateManagerEntry in _setStatesManagers)
@@ -97,7 +96,6 @@ namespace EasyRESTFramework.Client
                 }
             }
         }
-
         public async Task SaveAllAsync()
         {
             try
@@ -135,7 +133,7 @@ namespace EasyRESTFramework.Client
         {
             
             IWsSet<TEntity> retSet = null;
-            string entityName = nameof(TEntity);
+            string entityName = typeof(TEntity).Name;
             if (!_setStatesManagers.ContainsKey(entityName))
             {
                 _setStatesManagers[entityName] = new ObjectStateManager();
