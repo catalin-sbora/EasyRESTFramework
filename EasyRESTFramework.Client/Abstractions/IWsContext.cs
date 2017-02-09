@@ -11,7 +11,7 @@ namespace EasyRESTFramework.Client.Abstractions
         IWsSet<TEntity> Set<TEntity>() where TEntity: WsObject;
         Task SaveAllAsync();
         void SaveAll();
-        IRestClient RESTClient { get; }
+        IRestClientAsync RESTClient { get; }
         IQueryFilterBuilder FilterBuilder { get; }
     }
 }

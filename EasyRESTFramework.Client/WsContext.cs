@@ -14,11 +14,16 @@ namespace EasyRESTFramework.Client
     {
         //private Dictionary<string, IStateAccessor> dataSets = new Dictionary<string, IStateAccessor>();
         private readonly Dictionary<String, ObjectStateManager> _setStatesManagers = new Dictionary<string, ObjectStateManager>();
-        private readonly Dictionary<String, object> _availableSets = new Dictionary<string, object>();        
-        private readonly IRestClient _restClient;
+        private readonly Dictionary<String, object> _availableSets = new Dictionary<string, object>();
+        private readonly List<Type> _setsTypeList = new List<Type>();
+        private readonly HashSet<String> _registeredSets = new HashSet<String>();
+        private readonly IRestClientAsync _restClient;
         private readonly IQueryFilterBuilder _filterBuilder;
+        private TypeDependencyGraphBuilder _dependencyBuilder = null;
+        private bool _setsListChanged = true;
         
-        public WsContext(IRestClient restClient, IQueryFilterBuilder filterBuilder = null)
+
+        public WsContext(IRestClientAsync restClient, IQueryFilterBuilder filterBuilder = null)
         {
             _restClient = restClient;
             if (filterBuilder == null)
@@ -29,32 +34,64 @@ namespace EasyRESTFramework.Client
 
         private async Task SaveAddedObjects()
         {
-            foreach (var stateManagerEntry in _setStatesManagers)
+            DependencyGraph depGraph = null;
+            ICollection<String> executionList = null;
+            //check dependency for each type and create a graph of dependencies
+            //after the graph is created go through the nodes in order
+            if (_setsListChanged)
             {
-                IEnumerable<WsObject> added = stateManagerEntry.Value.GetAddedObjects();
-                if (added.Count<WsObject>() > 0)
+                _dependencyBuilder = new TypeDependencyGraphBuilder(_setsTypeList);
+                depGraph = _dependencyBuilder.BuildDependencyGraph();
+                _setsListChanged = false;
+            }
+            else
+            {
+                depGraph = _dependencyBuilder.LastGraph;
+            }
+
+            if (depGraph != null)
+            {
+                executionList = depGraph.GetExecutionList() as ICollection<String>;
+            }
+            else
+            {
+                throw new Exception("Failed to get access to the dependency graph.");
+            }
+
+            for (int idx = 0; idx < executionList.Count; idx++)
+            {
+                if (_setStatesManagers.ContainsKey(executionList.ElementAt(idx)))
                 {
-                    //save added
-                    if (_restClient != null)
+                    var stateManagerEntry = _setStatesManagers[executionList.ElementAt(idx)];
+                    IEnumerable<WsObject> added = stateManagerEntry.GetAddedObjects();
+                    if (added.Count<WsObject>() > 0)
                     {
-                        IEnumerable<WsObject> postedItems =  await _restClient.PostItemsAsync(added);
-                        var savedItemsCount = postedItems.Count();
-                        var addedItemsCount = added.Count();
-                        if (savedItemsCount == addedItemsCount)
+                        //save added
+                        if (_restClient != null)
                         {
-                            for (int i = 0; i < savedItemsCount; i++)
+                            IEnumerable<WsObject> postedItems = await _restClient.PostItemsAsync(added, stateManagerEntry.BaseItemType);
+                            var savedItemsCount = postedItems.Count();
+                            var addedItemsCount = added.Count();
+                            if (savedItemsCount == addedItemsCount)
                             {
-                                added.ElementAt(i).Id = postedItems.ElementAt(i).Id;
+                                for (int i = 0; i < savedItemsCount; i++)
+                                {
+                                    added.ElementAt(i).Id = postedItems.ElementAt(i).Id;
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception("Not all the elements were saved on the server side. We received less elements than we sent.");
+                                //some data is missing and could not be saved.
+                                //the entire data set needs to be reloaded to see what has been saved
+
                             }
                         }
-                        else
-                        {
-                            throw new Exception("Not all the elements were saved on the server side. We received less elements than we sent.");
-                            //some data is missing and could not be saved.
-                            //the entire data set needs to be reloaded to see what has been saved
-
-                        } 
                     }
+                }
+                else
+                {
+
                 }
             }
 
@@ -130,13 +167,16 @@ namespace EasyRESTFramework.Client
         }
 
         public IWsSet<TEntity> Set<TEntity>() where TEntity : WsObject
-        {
-            
+        {            
             IWsSet<TEntity> retSet = null;
             string entityName = typeof(TEntity).Name;
+            if (!_registeredSets.Contains(entityName))
+            {
+                _registeredSets.Add(entityName);
+            }
             if (!_setStatesManagers.ContainsKey(entityName))
             {
-                _setStatesManagers[entityName] = new ObjectStateManager();
+                _setStatesManagers[entityName] = new ObjectStateManager(typeof(IEnumerable<TEntity>));
             }
 
             if (_availableSets.ContainsKey(entityName))
@@ -148,11 +188,14 @@ namespace EasyRESTFramework.Client
                 //replace this with a factory call 
                 retSet = new WsSet<TEntity>(this, _setStatesManagers[entityName]);// as IWsSet<TEntity>;
                 _availableSets[entityName] = retSet as WsSet<TEntity>;
+                _setsTypeList.Add(typeof(TEntity));
+                _setsListChanged = true;
             }
+
             return retSet;
         }
 
-        public IRestClient RESTClient
+        public IRestClientAsync RESTClient
         {
             get
             {

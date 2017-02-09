@@ -34,8 +34,15 @@ namespace EasyRESTFramework.Client
             var properties = source.GetType().GetRuntimeProperties().Where(property => property.CanWrite == true );
             foreach (PropertyInfo property in properties)
             {
-                var fieldValue = property.GetValue(source);
-                property.SetValue(destination, fieldValue);
+                if (!typeof(IEnumerable<>).GetTypeInfo().IsAssignableFrom(property.GetType().GetTypeInfo()))
+                {
+                    var fieldValue = property.GetValue(source);
+                    property.SetValue(destination, fieldValue);
+                }
+                else
+                {
+                    property.SetValue(destination, null);
+                }
             }
         }
 
@@ -59,7 +66,6 @@ namespace EasyRESTFramework.Client
                     addResult = false;
                 }   
             }
-
             return addResult;
         }
 
@@ -94,12 +100,9 @@ namespace EasyRESTFramework.Client
                     result = true;
                 }
             }
-
             return result;
-        }      
-        
-       
-        
+        }     
+               
         public Type GetStoredType()
         {
             return typeof(TEntity);
@@ -120,6 +123,7 @@ namespace EasyRESTFramework.Client
                 IEnumerable<TEntity> internalResult = null;
                 internalResult =  await _wsContext.RESTClient.GetItemsAsync<TEntity>(filter);
                 Dictionary<TEntity, TEntity> tempResult = new Dictionary<TEntity, TEntity>();
+
                 foreach (TEntity item in internalResult)
                 {
                     if (_entities.ContainsKey(item))
@@ -130,14 +134,12 @@ namespace EasyRESTFramework.Client
                     }
                     else
                     {
-
                         //add this to our _entities list
                         _entities.Add(item, item);
                         result.Add(item);
                         tempResult.Add(item, item);
                     }
                 }
-
                 //now we should remove any entity that is on our side but is not on the server side                
                 if (_entities.Count > internalResult.Count())
                 {

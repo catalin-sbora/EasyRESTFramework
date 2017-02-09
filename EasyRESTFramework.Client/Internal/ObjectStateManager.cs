@@ -11,12 +11,19 @@ namespace EasyRESTFramework.Client.Internal
         private HashSet<WsObject> _addedContainer = new HashSet<WsObject>();
         private HashSet<WsObject> _modifiedContainer = new HashSet<WsObject>();
         private HashSet<WsObject> _deletedContainer = new HashSet<WsObject>();
-       
 
-        public ObjectStateManager()
+        private Type itemsType = typeof(object);
+
+        public ObjectStateManager(Type baseType)
         {
-
+            itemsType = baseType;
         }
+
+        public Type BaseItemType
+        {
+            get { return itemsType; }
+        }
+
         public bool AddObject(WsObject objectToAdd)
         {
             return _addedContainer.Add(objectToAdd);                
@@ -94,7 +101,8 @@ namespace EasyRESTFramework.Client.Internal
         public void MarkModifiedObjectsAsSaved()
         {
             _modifiedContainer.Clear();
-        }        
+        }
 
+        
     }
 }

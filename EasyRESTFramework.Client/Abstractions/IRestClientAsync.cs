@@ -9,14 +9,14 @@ using EasyRESTFramework.Client.Filters;
 namespace EasyRESTFramework.Client.Abstractions
 {
     /*REST Client async */
-    public interface IRestClient
+    public interface IRestClientAsync
     {
         //we need to specify conditions
         Task<TEntity> GetItemAsync<TEntity>(int itemId, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task<IEnumerable<TEntity>> GetItemsAsync<TEntity>(QueryFilter filter = null, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task DeleteItemAsync<TEntity>(TEntity itemToDelete, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task<TEntity> PostItemAsync<TEntity>(TEntity itemToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
-        Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
+        Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, Type collectionType, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task PutItemAsync<TEntity>(TEntity itemToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task PutItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
 

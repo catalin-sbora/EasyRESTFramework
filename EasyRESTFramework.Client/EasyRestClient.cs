@@ -12,7 +12,7 @@ using EasyRESTFramework.Client.Filters;
 
 namespace EasyRESTFramework.Client
 {
-    public class EasyRESTClient : IRestClient
+    public class EasyRESTClient : IRestClientAsync
     {
         private readonly string _baseURL = "";
         private readonly HttpClient _client;
@@ -108,7 +108,7 @@ namespace EasyRESTFramework.Client
             response.EnsureIsSuccessStatusCode();
         }
 
-        public async Task<TEntity> PostItemAsync<TEntity>(TEntity itemToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
+        public async Task<TEntity> PostItemAsync<TEntity>(TEntity itemToPost,  CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
         {
             var requestUri = "";
             TEntity newEntityData = null;
@@ -128,16 +128,21 @@ namespace EasyRESTFramework.Client
             return newEntityData;
         }
 
-        public async Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
+        public async Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, Type collectionType, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
         {
             IEnumerable<TEntity> retList = null;
             if (itemsToPost.Count() > 0)
             {
+                var typeToRead = collectionType;
                 var firstItem = itemsToPost.First();
                 var requestUri = getCollectionUri(firstItem);
                 var response = await _client.PostAsJsonAsync(requestUri, itemsToPost, cancelToken);
+                if (typeToRead == null)
+                { 
+                    typeToRead = itemsToPost.GetType();
+                }
                 response.EnsureIsSuccessStatusCode();
-                retList = await response.Content.ReadAsAsync(itemsToPost.GetType(), _mediaFormatters, cancelToken) as IEnumerable<TEntity>;
+                retList = await response.Content.ReadAsAsync(typeToRead, _mediaFormatters, cancelToken) as IEnumerable<TEntity>;
                 //retList = result;
             }
             return retList;

@@ -38,7 +38,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstractions\IRestClient.cs" />
+    <Compile Include="Abstractions\IRestClientAsync.cs" />
     <Compile Include="Abstractions\IQueryFilterBuilder.cs" />
     <Compile Include="Abstractions\IWsContext.cs" />
     <Compile Include="Abstractions\IWsSet.cs" />
@@ -48,7 +48,11 @@
     <Compile Include="Filters\QueryFilter.cs" />
     <Compile Include="Filters\QueryFilterCriteria.cs" />
     <Compile Include="Filters\QueryFilterBuilderImpl.cs" />
+    <Compile Include="Internal\DependencyGraph.cs" />
+    <Compile Include="Internal\GraphNode.cs" />
+    <Compile Include="Internal\Helper.cs" />
     <Compile Include="Internal\ObjectStateManager.cs" />
+    <Compile Include="Internal\TypeDependencyGraphBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WsContext.cs" />
     <Compile Include="WsObject.cs" />
