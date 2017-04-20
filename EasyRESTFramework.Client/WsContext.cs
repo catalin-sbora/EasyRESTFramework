@@ -81,7 +81,7 @@ namespace EasyRESTFramework.Client
                             }
                             else
                             {
-                                throw new Exception("Not all the elements were saved on the server side. We received less elements than we sent.");
+                                throw new Exception("Not all the elements were saved on the server side. We received fewer elements than we sent.");
                                 //some data is missing and could not be saved.
                                 //the entire data set needs to be reloaded to see what has been saved
 

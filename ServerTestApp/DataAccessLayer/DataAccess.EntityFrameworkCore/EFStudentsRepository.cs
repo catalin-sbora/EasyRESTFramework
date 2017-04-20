@@ -12,7 +12,8 @@ namespace DataAccess.EntityFrameworkCore
     {        
         public EFStudentsRepository(StudentsDbContext dbContext):base(dbContext)
         {
-            if (_dbContext.Database.EnsureCreated())
+
+           /* if (_dbContext.Database.EnsureCreated())
             {
                 //string format = "yyyy-MM-ddTHH:MM";
                 //database was created we need to add some info here
@@ -22,7 +23,7 @@ namespace DataAccess.EntityFrameworkCore
                 _dbSet.Add(new Student() { FirstName = "Diana", LastName = "Krall", BirthDay = Convert.ToDateTime("1990-05-01T07:54:59.9843750-04:00") });
 
             }
-            _dbContext.SaveChanges();
+            _dbContext.SaveChanges();*/
         }
         public IEnumerable<Student> GetByLastName(string lastName)
         {

@@ -19,7 +19,7 @@ namespace EasyRESTFramework.Client.Abstractions
         Task<IEnumerable<TEntity>> PostItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPost, Type collectionType, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task PutItemAsync<TEntity>(TEntity itemToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
         Task PutItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject;
-
+        //Task DoTask(CancellationToken cancelToken = default(CancellationToken));
 
        /* TEntity GetItem<TEntity>(int itemId) where TEntity : WsObject;
         IEnumerable<TEntity> GetItems<TEntity>(QueryFilter filter = null) where TEntity : WsObject;

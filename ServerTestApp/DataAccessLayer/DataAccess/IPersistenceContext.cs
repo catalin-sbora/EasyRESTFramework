@@ -11,6 +11,10 @@ namespace DataAccess.Interfaces
         bool InitializeContext(IConfigurationRoot configuration);
 
         IStudentsRepository GetStudentsRepository();
+        IZonesRepository GetZonesRepository();
+        IWateringZonesRepository GetWateringZonesRepository();
+        IWateringDaysRepository GetWateringDaysRepository();
+        IProgramsRepository GetProgramsRepository();
 
         bool SaveAll();
 

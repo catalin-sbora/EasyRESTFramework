@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EasyRESTTestClient"
-        xmlns:ModelViews="clr-namespace:EasyRESTTestClient.ModelViews"
+         xmlns:ModelViews="clr-namespace:EasyRESTTestClient.ModelViews"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <!--
@@ -17,7 +16,7 @@
                 <GridView>
                     <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}"/>
                     <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
-                    <GridViewColumn Header="Birth Day" DisplayMemberBinding="{Binding BirthDate, StringFormat=Date: {0:MMMM dd, yyyy}}"/>
+                    
                 </GridView>
             </ListView.View>
         </ListView>

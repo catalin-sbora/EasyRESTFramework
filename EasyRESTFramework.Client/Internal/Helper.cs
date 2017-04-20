@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EasyRESTFramework.Client.Internal
 {
-    public class Helper
+    internal class Helper
     {
         public static void ShallowCopy<TEntity>(TEntity source, TEntity destination)
         {

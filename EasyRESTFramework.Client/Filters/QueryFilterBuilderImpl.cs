@@ -84,6 +84,9 @@ namespace EasyRESTFramework.Client.Filters
                 case CriteriaCheckCondition.NotEqual:
                     strRet = "__ne__";
                     break;
+                case CriteriaCheckCondition.Contains:
+                    strRet = "__contains__";
+                    break;
 
             } 
 

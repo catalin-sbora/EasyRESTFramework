@@ -27,7 +27,7 @@ namespace DataAccess.EntityFrameworkCore
         }
 
         public IEnumerable<TEntity> GetAll()
-        {
+        {            
             return _dbSet.ToList();
         }
 
