@@ -240,9 +240,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/ServerTestApp/WebApplication2
-/TestApp
-/TestModel
-/TestModel
-/TestApp
 !EasyRESTFramework.Client/EasyRESTFramework.Client.nuget.targets
+
