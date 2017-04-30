@@ -245,3 +245,4 @@ ModelManifest.xml
 /TestModel
 /TestModel
 /TestApp
+!EasyRESTFramework.Client/EasyRESTFramework.Client.nuget.targets
