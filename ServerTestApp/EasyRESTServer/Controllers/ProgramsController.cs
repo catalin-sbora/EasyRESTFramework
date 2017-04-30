@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccess.DataModels;
+using DataAccess.Models;
 namespace EasyRESTServer.Controllers
 {
     [Route("api/[controller]")]
@@ -20,7 +20,7 @@ namespace EasyRESTServer.Controllers
 
         // GET: api/values
         [HttpGet]
-        public IEnumerable<DataAccess.DataModels.Program> Get()
+        public IEnumerable<DataAccess.Models.Program> Get()
         {
             var allPrograms = _programsRepo.GetAll();
             var days = allPrograms.ElementAt(0).WateringDays;
@@ -29,16 +29,16 @@ namespace EasyRESTServer.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public DataAccess.DataModels.Program Get(int id)
+        public DataAccess.Models.Program Get(int id)
         {
             return _programsRepo.GetById(id);
         }
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody]IEnumerable<DataAccess.DataModels.Program> programs)
+        public IActionResult Post([FromBody]IEnumerable<DataAccess.Models.Program> programs)
         {
-            foreach (DataAccess.DataModels.Program s in programs)
+            foreach (DataAccess.Models.Program s in programs)
             {
                 if (s.Id < 0)
                     s.Id = 0;
@@ -53,7 +53,7 @@ namespace EasyRESTServer.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]DataAccess.DataModels.Program value)
+        public IActionResult Put(int id, [FromBody]DataAccess.Models.Program value)
         {
             //update
             bool updated = _programsRepo.Update(value);

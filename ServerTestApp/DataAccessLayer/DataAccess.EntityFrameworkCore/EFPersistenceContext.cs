@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using DataAccess.DataModels;
+using DataAccess.Models;
 namespace DataAccess.EntityFrameworkCore
 {
     public class EFPersistenceContext : IPersistenceContext

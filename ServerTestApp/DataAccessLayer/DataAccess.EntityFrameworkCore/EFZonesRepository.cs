@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccess.DataModels;
+using DataAccess.Models;
 using DataAccess.Interfaces;
 
 namespace DataAccess.EntityFrameworkCore

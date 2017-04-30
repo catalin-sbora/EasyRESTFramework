@@ -1,4 +1,4 @@
-﻿using DataAccess.DataModels;
+﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

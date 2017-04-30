@@ -1,8 +1,11 @@
 ﻿{
   "supports": {},
   "dependencies": {
-    "Microsoft.AspNet.WebApi.Client": "5.2.3",
-    "Microsoft.Net.Http": "2.2.29"
+    "Microsoft.Bcl": "1.1.10",
+    "Microsoft.Bcl.Async": "1.0.168",
+    "Microsoft.Bcl.Build": "1.0.21",
+    "Microsoft.Net.Http": "2.2.29",
+    "Newtonsoft.Json": "10.0.2"
   },
   "frameworks": {
     ".NETPortable,Version=v4.5,Profile=Profile259": {}

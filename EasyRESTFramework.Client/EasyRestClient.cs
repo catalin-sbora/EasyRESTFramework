@@ -4,22 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Threading;
 using EasyRESTFramework.Client.Abstractions;
 using EasyRESTFramework.Client.Extensions;
 using EasyRESTFramework.Client.Filters;
-
+using Newtonsoft.Json;
 namespace EasyRESTFramework.Client
 {
     public class EasyRESTClient : IRestClientAsync
     {
         private readonly string _baseURL = "";
-        private readonly HttpClient _client;
-        private List<MediaTypeFormatter> _mediaFormatters = new List<MediaTypeFormatter>();
+        private readonly HttpClient _client;        
         private readonly IQueryFilterBuilder _queryFilterBuilder;
         public EasyRESTClient(string baseURL, IQueryFilterBuilder filterBuilder = null)
-        {            
+        {
+            string error;
             _baseURL = baseURL;
             _client = new HttpClient();
             if (filterBuilder != null)
@@ -32,8 +31,6 @@ namespace EasyRESTFramework.Client
                 _queryFilterBuilder = new QueryFilterBuilderImpl();
             }
             _client.BaseAddress = new System.Uri(_baseURL);
-            _mediaFormatters.Add(new JsonMediaTypeFormatter());
-            _mediaFormatters.Add(new XmlMediaTypeFormatter());         
             
         }
         private string getItemUri<TEntity>(TEntity itemType) where TEntity: WsObject
@@ -77,7 +74,8 @@ namespace EasyRESTFramework.Client
             var requestUri = getItemUri<TEntity>(itemId);
             var httpRespose = await _client.GetAsync(requestUri);
             httpRespose.EnsureIsSuccessStatusCode();
-            var retItem = await httpRespose.Content.ReadAsAsync<TEntity>(_mediaFormatters);
+            var responseString = await httpRespose.Content.ReadAsStringAsync();
+            var retItem = JsonConvert.DeserializeObject<TEntity>(responseString);
             return retItem;
         }
 
@@ -96,7 +94,8 @@ namespace EasyRESTFramework.Client
             
             var httpResponse = await _client.GetAsync(requestUri);
             httpResponse.EnsureIsSuccessStatusCode();
-            retList = await httpResponse.Content.ReadAsAsync<List<TEntity>>(_mediaFormatters);
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            retList = JsonConvert.DeserializeObject<List<TEntity>>(responseString);
 
             return retList;
         }
@@ -120,10 +119,12 @@ namespace EasyRESTFramework.Client
             {                
                 requestUri = getCollectionUri<TEntity>(itemToPost);
             }
-            //todo: post data depending on the selected media formatter
-            var response = await _client.PostAsJsonAsync(requestUri, itemToPost, cancelToken);
+            var serializedData = JsonConvert.SerializeObject(itemToPost);
+            var responseContent = new StringContent(serializedData, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync(requestUri, responseContent, cancelToken);
             response.EnsureIsSuccessStatusCode();
-            newEntityData = await response.Content.ReadAsAsync<TEntity>(_mediaFormatters, cancelToken);
+            var responseString = await response.Content.ReadAsStringAsync();
+            newEntityData = JsonConvert.DeserializeObject<TEntity>(responseString);
 
             return newEntityData;
         }
@@ -136,14 +137,17 @@ namespace EasyRESTFramework.Client
                 var typeToRead = collectionType;
                 var firstItem = itemsToPost.First();
                 var requestUri = getCollectionUri(firstItem);
-                var response = await _client.PostAsJsonAsync(requestUri, itemsToPost, cancelToken);
+                var serializedList = JsonConvert.SerializeObject(itemsToPost);
+                var stringResult = new StringContent(serializedList, Encoding.UTF8, "application/json");
+                var response = await _client.PostAsync(requestUri, stringResult, cancelToken);
                 if (typeToRead == null)
                 { 
                     typeToRead = itemsToPost.GetType();
                 }
                 response.EnsureIsSuccessStatusCode();
-                retList = await response.Content.ReadAsAsync(typeToRead, _mediaFormatters, cancelToken) as IEnumerable<TEntity>;
-                //retList = result;
+                var responseString = await response.Content.ReadAsStringAsync();
+                retList = JsonConvert.DeserializeObject<IEnumerable<TEntity>>(responseString);
+              
             }
             return retList;
         }
@@ -151,14 +155,18 @@ namespace EasyRESTFramework.Client
         public async Task PutItemAsync<TEntity>(TEntity itemToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
         {
             var requestURI = getItemUri(itemToPut);
-            var response = await _client.PutAsJsonAsync<TEntity>(requestURI, itemToPut, cancelToken);
+            var jsonString = JsonConvert.SerializeObject(itemToPut);
+            var jsonContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync(requestURI, jsonContent, cancelToken);
             response.EnsureIsSuccessStatusCode();           
         }
 
         public async Task PutItemsAsync<TEntity>(IEnumerable<TEntity> itemsToPut, CancellationToken cancelToken = default(CancellationToken)) where TEntity : WsObject
         {
             var requestURI = getCollectionUri<TEntity>();
-            var response = await _client.PutAsJsonAsync<IEnumerable<TEntity>>(requestURI, itemsToPut, cancelToken);
+            var jsonString = JsonConvert.SerializeObject(itemsToPut);
+            var jsonContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            var response = await _client.PutAsync(requestURI, jsonContent, cancelToken);
             response.EnsureIsSuccessStatusCode();
         }
 

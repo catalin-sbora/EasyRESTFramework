@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataAccess.DataModels
+namespace DataAccess.Models
 {
     public class UniqueObject
     {

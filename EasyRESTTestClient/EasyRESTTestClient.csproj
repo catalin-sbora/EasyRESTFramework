@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EasyRESTTestClient</RootNamespace>
     <AssemblyName>EasyRESTTestClient</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -279,6 +279,10 @@
     <ProjectReference Include="..\EasyRESTFramework.Client\EasyRESTFramework.Client.csproj">
       <Project>{76ebee74-ff30-4ddb-8184-235fa606fabb}</Project>
       <Name>EasyRESTFramework.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared\DataAccess.Models\DataAccess.Models.csproj">
+      <Project>{0cf96d84-5fc8-493c-866e-887cf22bdf80}</Project>
+      <Name>DataAccess.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

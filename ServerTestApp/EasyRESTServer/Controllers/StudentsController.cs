@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DataAccess.Interfaces;
-using DataAccess.DataModels;
+using DataAccess.Models;
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EasyRESTServer.Controllers

@@ -175,7 +175,7 @@ namespace EasyRESTFramework.Client
                     result = _entities.Values.Where(_wsContext.FilterBuilder.CreateExpressionFilter<TEntity>(filter)).ToList();
                 }
             }
-            return result;
+            return result.Where(_wsContext.FilterBuilder.CreateExpressionFilter<TEntity>(filter));
         }
     }
 }

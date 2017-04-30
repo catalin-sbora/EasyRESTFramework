@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.DataModels;
+using DataAccess.Models;
 
 namespace DataAccess.EntityFrameworkCore
 {
