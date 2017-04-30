@@ -11,6 +11,8 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-API|AnyCPU'" />
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\DataAccess.Models\DataAccess.Models.csproj" />
   </ItemGroup>
